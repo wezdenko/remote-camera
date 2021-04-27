@@ -1,0 +1,1 @@
+add_library(ObjectDetection ObjectDetection.cpp ObjectDetection.hpp)
