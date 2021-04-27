@@ -1,0 +1,9 @@
+﻿---
+BasedOnStyle: LLVM
+ColumnLimit: '80'
+IndentWidth: '4'
+Language: Cpp
+MaxEmptyLinesToKeep: '2'
+Standard: Cpp11
+
+...
