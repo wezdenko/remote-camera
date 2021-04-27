@@ -1,9 +1,11 @@
 #include "ObjectDetection.hpp"
+#include "MovementDetection.hpp"
+#include <iostream>
 #include <vector>
 
 
 int main() {
-    const int fps = 15;
+    const int fps = 10;
     const int numOfEdges = 10;
     const int threshold = 230;
 
@@ -20,12 +22,15 @@ int main() {
     }
 
     ObjectDetection objDetection(threshold);
-    cv::Point2d lastPosition;
+    MovementDetection mvDetection;
+    cv::Point2d position;
 
     while (vid.read(frame)) {
 
         objDetection.loadFrame(frame);
-        lastPosition = objDetection.detectObject(numOfEdges);
+        position = objDetection.detectObject(numOfEdges);
+
+        mvDetection.detectMovement(position);
 
         if (cv::waitKey(1000 / fps) >= 0) {
             break;
