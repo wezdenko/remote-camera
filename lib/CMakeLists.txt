@@ -1,1 +1,7 @@
-add_library(ObjectDetection ObjectDetection.cpp ObjectDetection.hpp)
+add_library(
+    Detection 
+    ObjectDetection.cpp
+    ObjectDetection.hpp
+    MovementDetection.cpp
+    MovementDetection.hpp
+)
