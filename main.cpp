@@ -22,7 +22,7 @@ int main() {
     }
 
     ObjectDetection objDetection(threshold);
-    MovementDetection mvDetection;
+    MovementDetection mvDetection(fps * 3);
     cv::Point2d position;
 
     while (vid.read(frame)) {
