@@ -30,6 +30,7 @@ class MovementDetection {
     void setFunction(void (*func)(const std::vector<cv::Point2d> &));
 
   private:
+    void determineMovement(const cv::Point2d &currentPosition);
     void changeStateToStationary();
     void changeStateToMoving();
     void sendVector();
