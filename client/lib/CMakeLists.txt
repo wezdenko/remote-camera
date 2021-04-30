@@ -1,0 +1,1 @@
+add_library(ClientLib Connector.hpp FileSender.hpp FileTransferer.hpp FileSender.cpp SocketConnector.hpp SocketConnector.cpp)
