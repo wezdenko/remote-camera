@@ -20,7 +20,8 @@ void MovementDetection::detectMovement(const cv::Point2d &currentPosition) {
             this->changeStateToMoving();
             this->framesWithoutMove = 0;
             this->points.push_back(currentPosition);
-
+            std::cout << currentPosition.x << ", " << currentPosition.y
+                      << std::endl;
         } else if (this->state == MOVING) {
             this->framesWithoutMove++;
         }
@@ -32,6 +33,8 @@ void MovementDetection::detectMovement(const cv::Point2d &currentPosition) {
     if (this->framesWithoutMove > this->delay) {
         this->changeStateToStationary();
     }
+
+    std::cout << this->state << " : " << this->framesWithoutMove << std::endl;
 
     this->lastPosition = currentPosition;
 }
