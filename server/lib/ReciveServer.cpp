@@ -38,7 +38,7 @@ void ReciveServer::acceptConnection(){
 }
 void ReciveServer::openServer(){
     unsigned conNumber = 0;
-    while(conNumber<2){
+    while(conNumber<1){
         acceptConnection();
         reciveData();
         conNumber++;

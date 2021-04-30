@@ -1,4 +1,5 @@
 #include "FileReciver.hpp"
+#include <iostream>
 FileReciver::FileReciver(){
 };
 void FileReciver::createFile(std::string fileName){

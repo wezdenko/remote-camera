@@ -15,7 +15,7 @@ int main()
     sender.transferFile([&](std::string data){
         if(data.size() > 4) connection.sendData(data, 20);
         else connection.sendData(data, 3);
-    }, "kurwa2");
+    }, "fotodziala");
     connection.closeConnection();
     return 0;
 
