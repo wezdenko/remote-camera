@@ -14,12 +14,12 @@ class ObjectDetection {
     std::vector<std::vector<cv::Point>> approxContours;
 
   public:
-    ObjectDetection(int threshold);
+    ObjectDetection(int threshold = 0);
     ~ObjectDetection();
 
     void loadFrame(cv::Mat &frame);
     cv::Point2d detectObject(int numOfEdges);
 
-private:
+  private:
     cv::Point2d getObjectCenter(int numOfEdges);
 };

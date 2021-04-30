@@ -4,4 +4,6 @@ add_library(
     ObjectDetection.hpp
     MovementDetection.cpp
     MovementDetection.hpp
+    Camera.cpp
+    Camera.hpp
 )
