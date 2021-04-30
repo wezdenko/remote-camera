@@ -13,17 +13,24 @@ class MovementDetection {
     int framesWithoutMove;
     int state;
 
+    void (*func)(const std::vector<cv::Point2d> &);
+
   public:
     static const int MOVING = 0;
     static const int STATIONARY = 1;
 
   public:
-    MovementDetection(int delay, double maxError = 0.1);
+    MovementDetection(int delay = 0, double maxError = 0.1);
     ~MovementDetection();
 
     void detectMovement(const cv::Point2d &currentPosition);
 
+    // sets function where the vector of points is sent after object stops
+    // moving
+    void setFunction(void (*func)(const std::vector<cv::Point2d> &));
+
   private:
     void changeStateToStationary();
     void changeStateToMoving();
+    void sendVector();
 };

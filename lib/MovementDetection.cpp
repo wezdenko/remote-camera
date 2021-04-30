@@ -7,6 +7,7 @@ MovementDetection::MovementDetection(int delay, double maxError) {
     this->maxError = maxError;
     this->framesWithoutMove = 0;
     this->state = MovementDetection::STATIONARY;
+    this->func = NULL;
 }
 
 MovementDetection::~MovementDetection() {}
@@ -39,12 +40,18 @@ void MovementDetection::detectMovement(const cv::Point2d &currentPosition) {
     this->lastPosition = currentPosition;
 }
 
+void MovementDetection::setFunction(
+    void (*func)(const std::vector<cv::Point2d> &)) {
+
+    this->func = func;
+}
+
 void MovementDetection::changeStateToStationary() {
     if (this->state == MOVING) {
         this->state = STATIONARY;
 
         this->framesWithoutMove = 0;
-        this->points.clear();
+        this->sendVector();
     }
 }
 
@@ -52,4 +59,11 @@ void MovementDetection::changeStateToMoving() {
     if (this->state == STATIONARY) {
         this->state = MOVING;
     }
+}
+
+void MovementDetection::sendVector() {
+    if (func != NULL) {
+        this->func(this->points);
+    }
+    this->points.clear();
 }
