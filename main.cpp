@@ -1,40 +1,19 @@
-#include "ObjectDetection.hpp"
+#include "Camera.hpp"
 #include "MovementDetection.hpp"
 #include <iostream>
 #include <vector>
+#include <unistd.h>
 
 
 int main() {
-    const int fps = 10;
-    const int numOfEdges = 10;
-    const int threshold = 230;
+    Camera camera(10, 10, 230);
+    cv::Point2d point;
 
-    cv::Mat frame;
-    cv::VideoCapture vid(0);
+    while (true) {
+        point = camera.processFrame();
+        std::cout << point << std::endl;
 
-    // default resolution is 640x480
-    // to change that use:
-    // vid.set(CAP_PROP_FRAME_WIDTH, width);
-    // vid.set(CAP_PROP_FRAME_HEIGHT, height);
-
-    if (!vid.isOpened()) {
-        return -1;
-    }
-
-    ObjectDetection objDetection(threshold);
-    MovementDetection mvDetection(fps * 3);
-    cv::Point2d position;
-
-    while (vid.read(frame)) {
-
-        objDetection.loadFrame(frame);
-        position = objDetection.detectObject(numOfEdges);
-
-        mvDetection.detectMovement(position);
-
-        if (cv::waitKey(1000 / fps) >= 0) {
-            break;
-        }
+        usleep(200 * 1000);
     }
 
     return 0;
