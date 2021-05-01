@@ -1,6 +1,6 @@
 #include "Camera.hpp"
 
-Camera::Camera(int fps, int numOfEdges, int threshold) {
+Camera::Camera(int numOfEdges, int threshold, int delay, double maxError) {
     this->vid = cv::VideoCapture(0);
 
     // default resolution is 640x480
@@ -12,15 +12,20 @@ Camera::Camera(int fps, int numOfEdges, int threshold) {
         throw "Couldn't connect to camera!";
     }
 
-    this->fps = fps;
     this->numOfEdges = numOfEdges;
     this->objDetection = ObjectDetection(threshold);
+    this->movDetection = MovementDetection(delay, maxError);
 }
 
 Camera::~Camera() {}
 
-cv::Point2d Camera::processFrame() {
+void Camera::processFrame() {
     vid.read(this->frame);
     objDetection.loadFrame(this->frame);
-    return objDetection.detectObject(this->numOfEdges);
+    cv::Point2d position = objDetection.detectObject(this->numOfEdges);
+    this->movDetection.detectMovement(position);
+}
+
+void Camera::setFunction(void (*func)(const std::vector<cv::Point2d> &)) {
+    this->movDetection.setFunction(func);
 }
