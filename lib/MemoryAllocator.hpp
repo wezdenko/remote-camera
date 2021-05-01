@@ -18,5 +18,6 @@ class MemoryAllocator{
     protected:
         int sharedMemmory;
         Shmbuf* buffer; 
+        std::string memoryName;
 
 };

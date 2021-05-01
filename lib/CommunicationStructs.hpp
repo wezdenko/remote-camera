@@ -1,8 +1,6 @@
 #pragma once
-
-const char* MEMORY_NAME = "/memory";
-const unsigned BUFFER_LENGTH = 25;
-const unsigned POINTS_NUMBER = 250;
+#define MEMORY_SIZE 4
+#define LIST_SIZE 250
 
 class Point
 {
@@ -13,5 +11,5 @@ class Point
 };
 
 struct Shmbuf {
-    Point   buf[BUFFER_LENGTH][POINTS_NUMBER];
+    Point   buf[MEMORY_SIZE][LIST_SIZE];
 };
