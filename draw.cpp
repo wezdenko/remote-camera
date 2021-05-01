@@ -14,3 +14,36 @@ void draw(const std::vector<cv::Point2d> &points, cv::Mat &img) {
         lastPoint = &point;
     }
 }
+
+int main() {
+    // shared memory with camera process
+    // pointer to array and array length
+    // ...
+
+    // convert array to vector
+    std::vector<cv::Point2d> points;
+
+    // create image
+    int width = 640;
+    int height = 480;
+    cv::Scalar backgroundColor(255, 255, 255); // white
+
+    cv::Mat image(width, height, CV_8UC3, backgroundColor);
+
+    // draw lines on the image
+    draw(points, image);
+
+    // shared memory with socket process
+    // ...
+
+    // writing image to buffer
+    // buffer must be a vector of uchars
+    std::vector<uchar> buff;
+    cv::imencode("name.jpeg", image, buff);
+
+    // create list of uchars in shared memory
+    // convert vector to this list
+    // ...
+
+    return 0;
+}

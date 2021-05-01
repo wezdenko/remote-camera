@@ -6,5 +6,5 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 include_directories(${OpenCV_INCLUDE_DIRS})
-add_executable(SKPS_Project main.cpp)
+add_executable(SKPS_Project draw.cpp)
 target_link_libraries(SKPS_Project ${OpenCV_LIBS})
