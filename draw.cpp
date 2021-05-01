@@ -21,14 +21,15 @@ int main() {
     // ...
 
     // convert array to vector
-    std::vector<cv::Point2d> points;
+    std::vector<cv::Point2d> points = {
+        {100, 100}, {100, 300}, {300, 300}, {100, 100}};
 
     // create image
     int width = 640;
     int height = 480;
     cv::Scalar backgroundColor(255, 255, 255); // white
 
-    cv::Mat image(width, height, CV_8UC3, backgroundColor);
+    cv::Mat image(height, width, CV_8UC3, backgroundColor);
 
     // draw lines on the image
     draw(points, image);
@@ -40,6 +41,8 @@ int main() {
     // buffer must be a vector of uchars
     std::vector<uchar> buff;
     cv::imencode("name.jpeg", image, buff);
+
+    cv::imwrite("triangle.jpeg", image);
 
     // create list of uchars in shared memory
     // convert vector to this list
