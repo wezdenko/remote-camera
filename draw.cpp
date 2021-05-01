@@ -28,7 +28,7 @@ int main() {
     int height = 480;
     cv::Scalar backgroundColor(255, 255, 255); // white
 
-    cv::Mat image(width, height, CV_8UC3, backgroundColor);
+    cv::Mat image(height, width, CV_8UC3, backgroundColor);
 
     // draw lines on the image
     draw(points, image);
