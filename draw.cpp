@@ -1,5 +1,6 @@
 #include "opencv2/imgcodecs.hpp"
 #include "opencv2/imgproc.hpp"
+#include <fstream>
 #include <vector>
 
 
@@ -40,9 +41,13 @@ int main() {
     // writing image to buffer
     // buffer must be a vector of uchars
     std::vector<uchar> buff;
-    cv::imencode("name.jpeg", image, buff);
+    cv::imencode("triangle.jpeg", image, buff);
 
-    cv::imwrite("triangle.jpeg", image);
+    // writing from buffer to disk
+    std::ofstream outFile("triangle.jpeg");
+    for (const uchar &byte : buff) {
+        outFile << byte;
+    }
 
     // create list of uchars in shared memory
     // convert vector to this list
