@@ -6,14 +6,18 @@
 
 
 int main() {
-    Camera camera(10, 10, 230);
-    cv::Point2d point;
+    int fps = 5;
+    int numOfEdges = 10;
+    int threshold = 230;
+    int delay = fps * 3;
+    double maxError = 0.1;
+
+    Camera camera(numOfEdges, threshold, delay, maxError);
 
     while (true) {
-        point = camera.processFrame();
-        std::cout << point << std::endl;
+        camera.processFrame();
 
-        usleep(200 * 1000);
+        usleep((1000 / fps) * 1000);
     }
 
     return 0;
