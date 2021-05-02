@@ -11,7 +11,7 @@
 #include "Server.hpp"
 
 
-using Saver = std::function<void(const char*, bool)>;
+using Saver = std::function<void(const char*)>;
 
 class ReciveServer: public Server{
     public:

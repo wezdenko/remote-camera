@@ -7,13 +7,10 @@
 
 int main(){
     std::unique_ptr<FileReciver> fileReciver(new FileReciver());
-    auto fileRecive = [&](const char* data, bool isCommand){
-        if(isCommand){ 
-            std::string command(data);
-            std::cout<<command<<std::endl;
-            if(command == "close") fileReciver->closeFile();
-            else fileReciver->createFile("fotodziala.jpeg");
-            }
+    auto fileRecive = [&](const char* data){
+        std::string recivedData(data);
+        if(recivedData == "close") fileReciver->closeFile();
+        else if(recivedData.size() > 4) fileReciver->createFile(recivedData+".jpeg");
         else fileReciver->saveData(data);
     };
     std::unique_ptr<ReciveServer> server(new ReciveServer(fileRecive, AF_INET, SOCK_STREAM));

@@ -46,7 +46,7 @@ void ReciveServer::openServer(){
 }
 void ReciveServer::reciveData(){
     std::string name = reciveName();
-    dataSaver(name.c_str(), true);
+    dataSaver(name.c_str());
     char buffer[3];
     while(true){
         memset(buffer, 0, 3);
@@ -59,10 +59,10 @@ void ReciveServer::reciveData(){
             std::cout<<std::endl<<"The client disconected"<< std::endl;
             break;
         }
-        dataSaver(buffer, false);
+        dataSaver(buffer);
     }
     close(clientSock);
-    dataSaver("close", true);
+    dataSaver("close");
 }
 std::string ReciveServer::reciveName(){
     char nameBuffer[20];
