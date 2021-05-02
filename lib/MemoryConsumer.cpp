@@ -3,9 +3,11 @@ MemoryConsumer::MemoryConsumer(std::string name):MemoryAllocator(name){};
 MemoryConsumer::~MemoryConsumer(){};
 std::vector<Point> MemoryConsumer::getFromMemory(unsigned index){
     std::vector<Point> points;
+    Point point;
+    // Copying buffer elements
     for(int i=0; i<LIST_SIZE; i++){
-        auto point = buffer->buf[index][i];
-        points.push_back(point);
+        point = buffer->buf[index].buf[i];
+        points.push_back(Point(point));
     }
     return points;
 }

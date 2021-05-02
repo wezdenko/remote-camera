@@ -5,7 +5,7 @@
 class MemoryProducer: public MemoryAllocator{
     public:
         MemoryProducer(std::string name);
-        unsigned addToMemory(const std::vector<Point>& points);
+        int addToMemory(const std::vector<Point>& points);
         unsigned getCurrentIndex();
         virtual ~MemoryProducer();
     private:

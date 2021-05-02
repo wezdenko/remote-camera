@@ -15,17 +15,18 @@ const char* QUEUE_NAME =  "/test_queue";
 const char* MEMORY_NAME = "/memory";
 
 int main(){
-    std::cout<<"CONSUMPTION START!\n";
     auto memory = MemoryConsumer(MEMORY_NAME);
     auto que = QueReciver(QUEUE_NAME, O_CREAT | O_RDONLY);
-    auto index = que.reciveData();
-    auto pointVec = memory.getFromMemory(std::stoi(index));
-    unsigned number = 0;
-    for(auto& point: pointVec){
-        std::cout<<number;
-        std::cout<<" Point x: "<<point.xPos<<" Point y: "<<point.yPos<<std::endl;
-        number++;
+    while(true){
+        auto index = que.reciveData();
+        auto pointVec = memory.getFromMemory(std::stoi(index));
+        unsigned number = 0;
+        std::cout<<"INDEX: "<<index<<std::endl;
+        for(auto& point: pointVec){
+            std::cout<<number;
+            std::cout<<" Point x: "<<point.xPos<<" Point y: "<<point.yPos<<std::endl;
+            number++;
+        }
     }
-    std::cout<<"CONSUMPTION END!\n";
     return 0;
 }
