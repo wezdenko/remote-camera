@@ -11,7 +11,6 @@ private:
     int numOfEdges;
 
     ObjectDetection objDetection;
-    MovementDetection movDetection;
 
     cv::Point2d position;
 
@@ -19,7 +18,9 @@ public:
     Camera(int numOfEdges, int threshold, int delay, double maxError);
     ~Camera();
 
+    bool isEndOfMovement() const;
     void processFrame();
     void setFunction(void (*func)(const std::vector<cv::Point2d> &));
+    MovementDetection movDetection;
 };
 

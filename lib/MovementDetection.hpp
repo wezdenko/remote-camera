@@ -5,7 +5,6 @@
 
 class MovementDetection {
   private:
-    std::vector<cv::Point2d> points;
     cv::Point2d lastPosition;
 
     double maxError;
@@ -17,6 +16,7 @@ class MovementDetection {
     void (*func)(const std::vector<cv::Point2d> &);
 
   public:
+    std::vector<cv::Point2d> points;
     static const int MOVING = 0;
     static const int STATIONARY = 1;
 

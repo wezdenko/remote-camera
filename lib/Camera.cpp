@@ -29,3 +29,6 @@ void Camera::processFrame() {
 void Camera::setFunction(void (*func)(const std::vector<cv::Point2d> &)) {
     this->movDetection.setFunction(func);
 }
+bool Camera::isEndOfMovement() const{
+    return this->movDetection.isEndOfMovement();
+};

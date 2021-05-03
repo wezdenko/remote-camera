@@ -3,15 +3,10 @@
 #define LIST_SIZE 250
 
 #include <vector>
+#include "opencv2/core/types.hpp"
 
-class Point
-{
-    public:
-        Point(): xPos(0), yPos(0){};
-        Point(double x, double y): xPos(x), yPos(y) {};
-        double xPos;
-        double yPos;
-};
+using Point = cv::Point2d;
+
 
 class MoveBuffer{
     public:
