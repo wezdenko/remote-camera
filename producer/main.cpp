@@ -26,8 +26,8 @@ int main(){
         camera.processFrame();
         if(camera.isEndOfMovement()){
             memory.addToMemory(camera.movDetection.points);
+            que.sendData(std::to_string(memory.getCurrentIndex()));
         }
-        que.sendData(std::to_string(memory.getCurrentIndex()));
 
 
         usleep((1000 / fps) * 1000);

@@ -23,8 +23,10 @@ int main(){
         unsigned number = 0;
         std::cout<<"INDEX: "<<index<<std::endl;
         for(auto& point: pointVec){
-            std::cout<<number;
-            std::cout<<" Point x: "<<point.xPos<<" Point y: "<<point.yPos<<std::endl;
+            if (point.x > 0 || point.y > 0) {
+                std::cout<<number;
+                std::cout<<" Point x: "<<point.x<<" Point y: "<<point.y<<std::endl;
+            }
             number++;
         }
     }
