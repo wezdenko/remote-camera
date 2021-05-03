@@ -16,7 +16,10 @@ class MoveBuffer{
         };
         inline void transferToBuffer(const std::vector<Point>& points){
             for(int i=0; i<LIST_SIZE; i++){
-                buf[i] = Point(points[i]);
+                if(points[i].x > 0.05)
+                    buf[i] = Point(points[i]);
+                else
+                    buf[i] = Point(-1.0, -1.0);
             }
         }
         Point buf[250];
