@@ -13,4 +13,11 @@ add_library(
     QueReciver.cpp
     QueSender.hpp
     QueSender.cpp
+    Detection 
+    ObjectDetection.cpp
+    ObjectDetection.hpp
+    MovementDetection.cpp
+    MovementDetection.hpp
+    Camera.cpp
+    Camera.hpp
 )
