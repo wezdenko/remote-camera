@@ -1,1 +1,16 @@
-add_library(CommunicationLib CommunicationStructs.hpp MemoryAllocator.hpp MemoryAllocator.cpp MemoryConsumer.hpp MemoryConsumer.cpp MemoryProducer.hpp MemoryProducer.cpp QueConnector.hpp QueConnector.cpp QueReciver.hpp QueReciver.cpp QueSender.hpp QueSender.cpp)
+add_library(
+    CommunicationLib
+    CommunicationStructs.hpp
+    MemoryAllocator.hpp
+    MemoryAllocator.cpp
+    MemoryConsumer.hpp
+    MemoryConsumer.cpp
+    MemoryProducer.hpp
+    MemoryProducer.cpp
+    QueConnector.hpp
+    QueConnector.cpp
+    QueReciver.hpp
+    QueReciver.cpp
+    QueSender.hpp
+    QueSender.cpp
+)
