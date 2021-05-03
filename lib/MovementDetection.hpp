@@ -13,6 +13,7 @@ class MovementDetection {
     int framesWithoutMove;
     int state;
 
+    bool movementEnded;
     void (*func)(const std::vector<cv::Point2d> &);
 
   public:
@@ -24,6 +25,7 @@ class MovementDetection {
     ~MovementDetection();
 
     void detectMovement(const cv::Point2d &currentPosition);
+    bool isEndOfMovement() const;
 
     // sets function where the vector of points is sent after object stops
     // moving

@@ -8,11 +8,13 @@ MovementDetection::MovementDetection(int delay, double maxError) {
     this->framesWithoutMove = 0;
     this->state = MovementDetection::STATIONARY;
     this->func = NULL;
+    this->movementEnded = false;
 }
 
 MovementDetection::~MovementDetection() {}
 
 void MovementDetection::detectMovement(const cv::Point2d &currentPosition) {
+    movementEnded = false;
 
     // if last position was observed
     if (this->lastPosition != cv::Point2d(-1, -1)) {
@@ -30,6 +32,10 @@ void MovementDetection::detectMovement(const cv::Point2d &currentPosition) {
     std::cout << this->state << " : " << this->framesWithoutMove << std::endl;
 
     this->lastPosition = currentPosition;
+}
+
+bool MovementDetection::isEndOfMovement() const {
+    return this->movementEnded;
 }
 
 void MovementDetection::setFunction(
@@ -59,6 +65,7 @@ void MovementDetection::changeStateToStationary() {
 
         this->framesWithoutMove = 0;
         this->sendVector();
+        this->movementEnded = true;
     }
 }
 
