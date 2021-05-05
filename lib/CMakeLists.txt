@@ -19,4 +19,11 @@ add_library(
     MovementDetection.hpp
     Camera.cpp
     Camera.hpp
+    Connector.hpp
+    FileSender.cpp
+    FileSender.hpp
+    FileTransferer.hpp
+    SocketConnector.cpp
+    SocketConnector.hpp
+    VectorSender.hpp
 )
