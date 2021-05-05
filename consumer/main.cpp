@@ -1,21 +1,24 @@
-#include <iostream>
-#include <string>
-#include <memory>
-#include <vector>
-#include <stdio.h>
-#include <sys/types.h>
-#include <mqueue.h>
-#include <unistd.h>
 #include "CommunicationStructs.hpp"
+#include "FileSender.hpp"
 #include "MemoryConsumer.hpp"
 #include "QueReciver.hpp"
-
+#include "SocketConnector.hpp"
+#include "VectorSender.hpp"
 #include "opencv2/imgcodecs.hpp"
 #include "opencv2/imgproc.hpp"
+#include <arpa/inet.h>
+#include <iostream>
+#include <memory>
+#include <mqueue.h>
+#include <stdio.h>
+#include <string>
+#include <sys/types.h>
+#include <unistd.h>
+#include <vector>
 
 
-const char* QUEUE_NAME =  "/test_queue";
-const char* MEMORY_NAME = "/memory";
+const char *QUEUE_NAME = "/test_queue";
+const char *MEMORY_NAME = "/memory";
 
 
 void draw(const std::vector<cv::Point2d> &points, cv::Mat &img) {
@@ -30,29 +33,34 @@ void draw(const std::vector<cv::Point2d> &points, cv::Mat &img) {
     }
 }
 
-int main(){
+int main() {
     int width = 640;
     int height = 480;
     cv::Scalar backgroundColor(255, 255, 255); // white
 
     cv::Mat image(height, width, CV_8UC3, backgroundColor);
+    std::vector<uchar> imageVec;
 
     auto memory = MemoryConsumer(MEMORY_NAME);
     auto que = QueReciver(QUEUE_NAME, O_CREAT | O_RDONLY);
-    while(true){
+    auto socketConnector = SocketConnector(AF_INET, SOCK_STREAM);
+    while (true) {
         auto index = que.reciveData();
         auto pointVec = memory.getFromMemory(std::stoi(index));
         draw(pointVec, image);
-        cv::imwrite("name.jpeg", image);
-        unsigned number = 0;
-        std::cout<<"INDEX: "<<index<<std::endl;
-        for(auto& point: pointVec){
-            if (point.x > 0 || point.y > 0) {
-                std::cout<<number;
-                std::cout<<" Point x: "<<point.x<<" Point y: "<<point.y<<std::endl;
-            }
-            number++;
+        if (!socketConnector.connectToServer("172.17.0.1", 54000)) {
+            cv::imwrite("name.jpeg", image);
+        } else {
+            cv::imencode("name.jpeg", image, imageVec);
+            auto vecSender = VectorSender<uchar>(imageVec);
+            vecSender.transferFile(
+                [&](std::string data) {
+                    if (data.size() > 4)
+                        socketConnector.sendData(data, 20);
+                    else
+                        socketConnector.sendData(data, 3);
+                },
+                "name");
         }
+        return 0;
     }
-    return 0;
-}
