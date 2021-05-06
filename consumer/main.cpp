@@ -15,6 +15,8 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <vector>
+#include "FileDetector.hpp"
+#include "FileSender.hpp"
 
 
 const char *QUEUE_NAME = "/test_queue";
@@ -34,6 +36,15 @@ void draw(const std::vector<cv::Point2d> &points, cv::Mat &img) {
 }
 
 int main() {
+
+    auto isImage = [](std::string& name) -> bool{
+        auto jpegLocation = name.find(".jpeg");
+        if(jpegLocation>5 && jpegLocation<20){
+            name = name.substr(2, jpegLocation-2);
+            return true;
+        }
+        return false;
+    };
     int width = 640;
     int height = 480;
     cv::Scalar backgroundColor(255, 255, 255); // white
@@ -44,6 +55,12 @@ int main() {
     auto memory = MemoryConsumer(MEMORY_NAME);
     auto que = QueReciver(QUEUE_NAME, O_CREAT | O_RDONLY);
     auto socketConnector = SocketConnector(AF_INET, SOCK_STREAM);
+    auto sendFunction = [&](std::string data) {
+                    if (data.size() > 4)
+                        socketConnector.sendData(data, 20);
+                    else
+                        socketConnector.sendData(data, 3);
+    };
     while (true) {
         auto index = que.reciveData();
         auto pointVec = memory.getFromMemory(std::stoi(index));
@@ -53,14 +70,15 @@ int main() {
         } else {
             cv::imencode("name.jpeg", image, imageVec);
             auto vecSender = VectorSender<uchar>(imageVec);
-            vecSender.transferFile(
-                [&](std::string data) {
-                    if (data.size() > 4)
-                        socketConnector.sendData(data, 20);
-                    else
-                        socketConnector.sendData(data, 3);
-                },
-                "name");
+            FileDetector fileDetector(".");
+            auto files = fileDetector.getFilesName(isImage);
+            if(files.size() > 1){
+                auto fileSender = FileSender();
+                for(const auto& file : files){
+                    fileSender.transferFile(sendFunction, file);
+                };
+            }
+            vecSender.transferFile(sendFunction, "name");
         }
     }
     return 0;

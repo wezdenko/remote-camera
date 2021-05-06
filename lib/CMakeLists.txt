@@ -26,4 +26,6 @@ add_library(
     SocketConnector.cpp
     SocketConnector.hpp
     VectorSender.hpp
+    FileDetector.hpp
+    FileDetector.cpp
 )
