@@ -17,6 +17,7 @@
 #include <vector>
 #include "FileDetector.hpp"
 #include "FileSender.hpp"
+#include "Def.h"
 
 
 const char *QUEUE_NAME = "/test_queue";
@@ -45,11 +46,10 @@ int main() {
         }
         return false;
     };
-    int width = 640;
-    int height = 480;
+
     cv::Scalar backgroundColor(255, 255, 255); // white
 
-    cv::Mat image(height, width, CV_8UC3, backgroundColor);
+    cv::Mat image(HEIGHT, WIDTH, CV_8UC3, backgroundColor);
     std::vector<uchar> imageVec;
 
     auto memory = MemoryConsumer(MEMORY_NAME);
@@ -65,7 +65,7 @@ int main() {
         auto index = que.reciveData();
         auto pointVec = memory.getFromMemory(std::stoi(index));
         draw(pointVec, image);
-        if (!socketConnector.connectToServer("172.17.0.1", 54000)) {
+        if (!socketConnector.connectToServer(IP_ADDR, PORT)) {
             cv::imwrite("name.jpeg", image);
         } else {
             cv::imencode("name.jpeg", image, imageVec);

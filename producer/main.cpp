@@ -6,6 +6,7 @@
 #include "MemoryProducer.hpp"
 #include "QueSender.hpp"
 #include "Camera.hpp"
+#include "Def.h"
 
 
 const char* QUEUE_NAME =  "/test_queue";
@@ -14,13 +15,8 @@ const char* MEMORY_NAME = "/memory";
 int main(){
     auto memory = MemoryProducer(MEMORY_NAME);
     auto que = QueSender(QUEUE_NAME, O_WRONLY);
-    int fps = 5;
-    int numOfEdges = 10;
-    int threshold = 230;
-    int delay = fps * 3;
-    double maxError = 0.1;
 
-    Camera camera(numOfEdges, threshold, delay, maxError);
+    Camera camera(NUM_OF_EDGES, THRESHOLD, DELAY, MAX_ERROR);
 
     while (true) {
         camera.processFrame();
@@ -30,7 +26,7 @@ int main(){
         }
 
 
-        usleep((1000 / fps) * 1000);
+        usleep((1000 / FPS) * 1000);
     }
     return 0;
 }
