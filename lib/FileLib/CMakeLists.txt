@@ -1,0 +1,9 @@
+add_library(
+    FileLib
+    FileDetector.cpp
+    FileDetector.hpp
+    FileSender.cpp
+    FileSender.hpp
+    FileTransferer.hpp
+    VectorSender.hpp
+)

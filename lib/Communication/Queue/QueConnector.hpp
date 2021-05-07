@@ -5,7 +5,7 @@
 #include <sys/types.h>
 #include <mqueue.h>
 #include <unistd.h>
-#include "CommunicationStructs.hpp"
+#include "../CommunicationStructs.hpp"
 
 
 

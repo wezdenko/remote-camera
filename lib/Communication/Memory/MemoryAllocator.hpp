@@ -5,7 +5,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <string>
-#include "CommunicationStructs.hpp"
+#include "../CommunicationStructs.hpp"
 
 
 class MemoryAllocator{

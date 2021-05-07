@@ -1,31 +1,4 @@
-add_library(
-    CommunicationLib
-    CommunicationStructs.hpp
-    MemoryAllocator.hpp
-    MemoryAllocator.cpp
-    MemoryConsumer.hpp
-    MemoryConsumer.cpp
-    MemoryProducer.hpp
-    MemoryProducer.cpp
-    QueConnector.hpp
-    QueConnector.cpp
-    QueReciver.hpp
-    QueReciver.cpp
-    QueSender.hpp
-    QueSender.cpp
-    ObjectDetection.cpp
-    ObjectDetection.hpp
-    MovementDetection.cpp
-    MovementDetection.hpp
-    Camera.cpp
-    Camera.hpp
-    Connector.hpp
-    FileSender.cpp
-    FileSender.hpp
-    FileTransferer.hpp
-    SocketConnector.cpp
-    SocketConnector.hpp
-    VectorSender.hpp
-    FileDetector.hpp
-    FileDetector.cpp
-)
+add_subdirectory(Camera)
+add_subdirectory(Socket)
+add_subdirectory(Communication)
+add_subdirectory(FileLib)

@@ -3,9 +3,9 @@
 #include <mqueue.h>
 #include <stdio.h>
 #include <unistd.h>
-#include "MemoryProducer.hpp"
-#include "QueSender.hpp"
-#include "Camera.hpp"
+#include "Communication/Memory/MemoryProducer.hpp"
+#include "Communication/Queue/QueSender.hpp"
+#include "Camera/Camera.hpp"
 #include "Def.h"
 
 

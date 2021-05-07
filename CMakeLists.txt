@@ -11,5 +11,5 @@ add_subdirectory(lib)
 add_subdirectory(producer)
 add_subdirectory(consumer)
 
-set_property(TARGET ProducerApp CommunicationLib PROPERTY CMAKE_CXX_CLANG_TIDY)
-set_property(TARGET ConsumerApp CommunicationLib PROPERTY CMAKE_CXX_CLANG_TIDY)
+set_property(TARGET ProducerApp PROPERTY CMAKE_CXX_CLANG_TIDY)
+set_property(TARGET ConsumerApp PROPERTY CMAKE_CXX_CLANG_TIDY)

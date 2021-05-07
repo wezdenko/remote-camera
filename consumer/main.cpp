@@ -1,9 +1,9 @@
-#include "CommunicationStructs.hpp"
-#include "FileSender.hpp"
-#include "MemoryConsumer.hpp"
-#include "QueReciver.hpp"
-#include "SocketConnector.hpp"
-#include "VectorSender.hpp"
+#include "Communication/CommunicationStructs.hpp"
+#include "FileLib/FileSender.hpp"
+#include "Communication/Memory/MemoryConsumer.hpp"
+#include "Communication/Queue/QueReceiver.hpp"
+#include "Socket/SocketConnector.hpp"
+#include "FileLib/VectorSender.hpp"
 #include "opencv2/imgcodecs.hpp"
 #include "opencv2/imgproc.hpp"
 #include <arpa/inet.h>
@@ -15,8 +15,8 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <vector>
-#include "FileDetector.hpp"
-#include "FileSender.hpp"
+#include "FileLib/FileDetector.hpp"
+#include "FileLib/FileSender.hpp"
 #include "Def.h"
 
 
@@ -53,7 +53,7 @@ int main() {
     std::vector<uchar> imageVec;
 
     auto memory = MemoryConsumer(MEMORY_NAME);
-    auto que = QueReciver(QUEUE_NAME, O_CREAT | O_RDONLY);
+    auto que = QueReceiver(QUEUE_NAME, O_CREAT | O_RDONLY);
     auto socketConnector = SocketConnector(AF_INET, SOCK_STREAM);
     auto sendFunction = [&](std::string data) {
                     if (data.size() > 4)

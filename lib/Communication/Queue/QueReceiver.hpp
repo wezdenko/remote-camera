@@ -3,11 +3,11 @@
 #include "QueConnector.hpp"
 
 
-class QueReciver: public QueConnector{
+class QueReceiver: public QueConnector{
     public:
-        QueReciver(std::string name, int flags);
+        QueReceiver(std::string name, int flags);
         virtual std::string reciveData();
-        ~QueReciver(){};
+        ~QueReceiver(){};
     protected:
         char buffer[MAX_SIZE];
 };
