@@ -1,0 +1,9 @@
+add_library(
+    ServerLib
+    Server.hpp
+    DataSaver.hpp
+    FileReciver.hpp
+    FileReciver.cpp
+    ReciveServer.hpp
+    ReciveServer.cpp
+)
