@@ -17,6 +17,7 @@
 #include "opencv2/imgproc.hpp"
 #include "FileLib/FileDetector.hpp"
 #include "FileLib/FileSender.hpp"
+#include "FileLib/Date.hpp"
 #include "Def.h"
 
 
@@ -65,10 +66,11 @@ int main() {
         auto index = que.reciveData();
         auto pointVec = memory.getFromMemory(std::stoi(index));
         draw(pointVec, image);
+        auto date = Date::getTime();
         if (!socketConnector.connectToServer(IP_ADDR, PORT)) {
-            cv::imwrite("name.jpeg", image);
+            cv::imwrite(date+".jpeg", image);
         } else {
-            cv::imencode("name.jpeg", image, imageVec);
+            cv::imencode(date+".jpeg", image, imageVec);
             auto vecSender = VectorSender<uchar>(imageVec);
             FileDetector fileDetector(".");
             auto files = fileDetector.getFilesName(isImage);
@@ -78,7 +80,7 @@ int main() {
                     fileSender.transferFile(sendFunction, file);
                 };
             }
-            vecSender.transferFile(sendFunction, "name");
+            vecSender.transferFile(sendFunction, date);
         }
     }
     return 0;
