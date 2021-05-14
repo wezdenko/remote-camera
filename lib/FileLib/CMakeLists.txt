@@ -6,4 +6,6 @@ add_library(
     FileSender.hpp
     FileTransferer.hpp
     VectorSender.hpp
+    Date.cpp
+    Date.hpp
 )
