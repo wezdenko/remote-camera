@@ -44,6 +44,14 @@ void MovementDetection::setFunction(
     this->func = func;
 }
 
+const std::vector<cv::Point2d> &MovementDetection::getPoints() const {
+    return this->points;
+}
+
+void MovementDetection::clearPoints() {
+    this->points.clear();
+}
+
 void MovementDetection::determineMovement(const cv::Point2d &currentPosition) {
     cv::Point2d delta = this->lastPosition - currentPosition;
     double positionChange = delta.x * delta.x + delta.y * delta.y;
@@ -64,7 +72,7 @@ void MovementDetection::changeStateToStationary() {
         this->state = STATIONARY;
 
         this->framesWithoutMove = 0;
-        this->sendVector();
+        // this->sendVector();
         this->movementEnded = true;
     }
 }

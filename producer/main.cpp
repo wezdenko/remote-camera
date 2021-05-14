@@ -21,8 +21,9 @@ int main(){
     while (true) {
         camera.processFrame();
         if(camera.isEndOfMovement()){
-            memory.addToMemory(camera.movDetection.points);
+            memory.addToMemory(camera.getPoints());
             que.sendData(std::to_string(memory.getCurrentIndex()));
+            camera.clearPoints();
         }
 
 
