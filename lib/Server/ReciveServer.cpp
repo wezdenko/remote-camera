@@ -37,20 +37,18 @@ void ReciveServer::acceptConnection(){
     }
 }
 void ReciveServer::openServer(){
-    unsigned conNumber = 0;
-    while(conNumber<1){
+    while(true){
         acceptConnection();
         reciveData();
-        conNumber++;
     }
 }
 void ReciveServer::reciveData(){
     std::string name = reciveName();
     dataSaver(name.c_str());
-    char buffer[3];
+    char buffer[DATA_SIZE];
     while(true){
-        memset(buffer, 0, 3);
-        int bytesRecv = recv(clientSock, buffer, 3, 0);
+        memset(buffer, 0, DATA_SIZE);
+        int bytesRecv = recv(clientSock, buffer, DATA_SIZE, 0);
         if(bytesRecv == -1){
             std::cerr << "There was a connecting isse "<<std::endl;
             break;
@@ -65,10 +63,10 @@ void ReciveServer::reciveData(){
     dataSaver("close");
 }
 std::string ReciveServer::reciveName(){
-    char nameBuffer[20];
-    int bytesRecv = recv(clientSock, nameBuffer, 20, 0);
+    char nameBuffer[FILE_NAME_SIZE];
+    int bytesRecv = recv(clientSock, nameBuffer, FILE_NAME_SIZE, 0);
     std::string name(nameBuffer);
-    memset(nameBuffer, 0, 20);
+    memset(nameBuffer, 0, FILE_NAME_SIZE);
     return name;
 
 }

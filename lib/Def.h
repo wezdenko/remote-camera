@@ -12,3 +12,7 @@
 // globals for sockets
 #define IP_ADDR "172.17.0.1"
 #define PORT 54000
+
+// globals for data transmision
+#define FILE_NAME_SIZE 20
+#define DATA_SIZE 3

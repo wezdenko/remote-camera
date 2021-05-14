@@ -9,6 +9,7 @@
 #include <string>
 #include <functional>
 #include "Server.hpp"
+#include "../Def.h"
 
 
 using Saver = std::function<void(const char*)>;
