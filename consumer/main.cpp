@@ -1,11 +1,3 @@
-#include "Communication/CommunicationStructs.hpp"
-#include "FileLib/FileSender.hpp"
-#include "Communication/Memory/MemoryConsumer.hpp"
-#include "Communication/Queue/QueReceiver.hpp"
-#include "Socket/SocketConnector.hpp"
-#include "FileLib/VectorSender.hpp"
-#include "opencv2/imgcodecs.hpp"
-#include "opencv2/imgproc.hpp"
 #include <arpa/inet.h>
 #include <iostream>
 #include <memory>
@@ -15,6 +7,14 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <vector>
+#include "Communication/CommunicationStructs.hpp"
+#include "FileLib/FileSender.hpp"
+#include "Communication/Memory/MemoryConsumer.hpp"
+#include "Communication/Queue/QueReceiver.hpp"
+#include "Socket/SocketConnector.hpp"
+#include "FileLib/VectorSender.hpp"
+#include "opencv2/imgcodecs.hpp"
+#include "opencv2/imgproc.hpp"
 #include "FileLib/FileDetector.hpp"
 #include "FileLib/FileSender.hpp"
 #include "Def.h"
@@ -56,10 +56,10 @@ int main() {
     auto que = QueReceiver(QUEUE_NAME, O_CREAT | O_RDONLY);
     auto socketConnector = SocketConnector(AF_INET, SOCK_STREAM);
     auto sendFunction = [&](std::string data) {
-                    if (data.size() > 4)
-                        socketConnector.sendData(data, 20);
+                    if (data.size() > DATA_SIZE)
+                        socketConnector.sendData(data, FILE_NAME_SIZE);
                     else
-                        socketConnector.sendData(data, 3);
+                        socketConnector.sendData(data, DATA_SIZE);
     };
     while (true) {
         auto index = que.reciveData();
