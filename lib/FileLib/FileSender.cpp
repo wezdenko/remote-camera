@@ -1,5 +1,4 @@
 #include "FileSender.hpp"
-#include <iostream>
 
 FileSender::FileSender()
 {
@@ -13,6 +12,7 @@ void FileSender::transferFile(std::function<void(std::string)> transfer, std::st
         transfer(std::to_string(data));
         data = file.get();
     }
+    transfer("qit");
     file.close();
 }
 void FileSender::openFile(std::string fileName){

@@ -11,6 +11,7 @@ class VectorSender: public FileTransferer{
             for(const auto& singleData : data){
                 transfer(std::to_string(singleData));
             }
+            transfer("qit");
         }
         void setVector(const std::vector<T>& data){
             this->data = data;

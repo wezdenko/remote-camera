@@ -14,5 +14,5 @@
 #define PORT 54000
 
 // globals for data transmision
-#define FILE_NAME_SIZE 20
+#define FILE_NAME_SIZE 35
 #define DATA_SIZE 3

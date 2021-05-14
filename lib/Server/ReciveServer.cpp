@@ -53,8 +53,8 @@ void ReciveServer::reciveData(){
             std::cerr << "There was a connecting isse "<<std::endl;
             break;
         }
-        if(bytesRecv == 0){
-            std::cout<<std::endl<<"The client disconected"<< std::endl;
+        if(bytesRecv == 0 || buffer[0] == 'q'){
+            std::cout<<"The client disconected"<< std::endl;
             break;
         }
         dataSaver(buffer);

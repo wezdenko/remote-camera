@@ -1,3 +1,14 @@
+#include "Communication/CommunicationStructs.hpp"
+#include "Communication/Memory/MemoryConsumer.hpp"
+#include "Communication/Queue/QueReceiver.hpp"
+#include "Def.h"
+#include "FileLib/Date.hpp"
+#include "FileLib/FileDetector.hpp"
+#include "FileLib/FileSender.hpp"
+#include "FileLib/VectorSender.hpp"
+#include "Socket/SocketConnector.hpp"
+#include "opencv2/imgcodecs.hpp"
+#include "opencv2/imgproc.hpp"
 #include <arpa/inet.h>
 #include <iostream>
 #include <memory>
@@ -7,18 +18,6 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <vector>
-#include "Communication/CommunicationStructs.hpp"
-#include "FileLib/FileSender.hpp"
-#include "Communication/Memory/MemoryConsumer.hpp"
-#include "Communication/Queue/QueReceiver.hpp"
-#include "Socket/SocketConnector.hpp"
-#include "FileLib/VectorSender.hpp"
-#include "opencv2/imgcodecs.hpp"
-#include "opencv2/imgproc.hpp"
-#include "FileLib/FileDetector.hpp"
-#include "FileLib/FileSender.hpp"
-#include "FileLib/Date.hpp"
-#include "Def.h"
 
 
 const char *QUEUE_NAME = "/test_queue";
@@ -37,12 +36,13 @@ void draw(const std::vector<cv::Point2d> &points, cv::Mat &img) {
     }
 }
 
+
 int main() {
 
-    auto isImage = [](std::string& name) -> bool{
+    auto isImage = [](std::string &name) -> bool {
         auto jpegLocation = name.find(".jpeg");
-        if(jpegLocation>5 && jpegLocation<20){
-            name = name.substr(2, jpegLocation-2);
+        if (jpegLocation == 27) {
+            name = name.substr(2, jpegLocation - 2);
             return true;
         }
         return false;
@@ -55,32 +55,39 @@ int main() {
 
     auto memory = MemoryConsumer(MEMORY_NAME);
     auto que = QueReceiver(QUEUE_NAME, O_CREAT | O_RDONLY);
-    auto socketConnector = SocketConnector(AF_INET, SOCK_STREAM);
-    auto sendFunction = [&](std::string data) {
-                    if (data.size() > DATA_SIZE)
-                        socketConnector.sendData(data, FILE_NAME_SIZE);
-                    else
-                        socketConnector.sendData(data, DATA_SIZE);
-    };
     while (true) {
         auto index = que.reciveData();
         auto pointVec = memory.getFromMemory(std::stoi(index));
         draw(pointVec, image);
         auto date = Date::getTime();
+        auto socketConnector = SocketConnector(AF_INET, SOCK_STREAM);
+        auto sendFunction = [&](std::string data) {
+            if (data.size() > DATA_SIZE)
+                socketConnector.sendData(data, FILE_NAME_SIZE);
+            else
+                socketConnector.sendData(data, DATA_SIZE);
+        };
         if (!socketConnector.connectToServer(IP_ADDR, PORT)) {
-            cv::imwrite(date+".jpeg", image);
+            cv::imwrite(date + ".jpeg", image);
         } else {
-            cv::imencode(date+".jpeg", image, imageVec);
+            cv::imencode(date + ".jpeg", image, imageVec);
             auto vecSender = VectorSender<uchar>(imageVec);
+            vecSender.transferFile(sendFunction, date);
+            socketConnector.closeConnection();
             FileDetector fileDetector(".");
             auto files = fileDetector.getFilesName(isImage);
-            if(files.size() > 1){
+            if (files.size() >= 1) {
                 auto fileSender = FileSender();
-                for(const auto& file : files){
-                    fileSender.transferFile(sendFunction, file);
+                for (const auto &file : files) {
+                    socketConnector = SocketConnector(AF_INET, SOCK_STREAM);
+                    if (socketConnector.connectToServer(IP_ADDR, PORT)) {
+                        fileSender.transferFile(sendFunction, file);
+                        socketConnector.closeConnection();
+                        std::string fileName = file + ".jpeg";
+                        std::remove(fileName.c_str());
+                    }
                 };
             }
-            vecSender.transferFile(sendFunction, date);
         }
     }
     return 0;
