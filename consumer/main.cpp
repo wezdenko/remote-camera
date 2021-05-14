@@ -58,6 +58,7 @@ int main() {
     while (true) {
         auto index = que.reciveData();
         auto pointVec = memory.getFromMemory(std::stoi(index));
+        image = backgroundColor;
         draw(pointVec, image);
         auto date = Date::getTime();
         auto socketConnector = SocketConnector(AF_INET, SOCK_STREAM);
