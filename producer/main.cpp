@@ -28,8 +28,6 @@ int main(){
             que.sendData(std::to_string(memory.getCurrentIndex()));
             camera.clearPoints();
         }
-
-
         usleep((1000 / FPS) * 1000);
     }
     return 0;

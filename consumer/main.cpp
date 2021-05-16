@@ -24,9 +24,46 @@ const char *QUEUE_NAME = "/test_queue";
 const char *MEMORY_NAME = "/memory";
 
 
+std::vector<std::string> getRemainingImagesNames();
+void sendRemainingFiles(const std::vector<std::string> &names);
+void sendMemoryImage(const std::vector<uchar> &imageVec,
+                     const std::string &date);
+bool isConnection();
+void draw(const std::vector<cv::Point2d> &points, cv::Mat &img);
+
+
+int main() {
+
+    cv::Scalar backgroundColor(255, 255, 255); // white
+
+    cv::Mat image(HEIGHT, WIDTH, CV_8UC3, backgroundColor);
+    std::vector<uchar> imageVec;
+
+    auto memory = MemoryConsumer(MEMORY_NAME);
+    auto que = QueReceiver(QUEUE_NAME, O_CREAT | O_RDONLY);
+    while (true) {
+        auto index = que.reciveData();
+        auto pointVec = memory.getFromMemory(std::stoi(index));
+        image = backgroundColor;
+        draw(pointVec, image);
+        auto date = Date::getTime();
+        if (!isConnection()) {
+            cv::imwrite(date + FILE_TYPE, image);
+        } else {
+            cv::imencode(date + FILE_TYPE, image, imageVec);
+            sendMemoryImage(imageVec, date);
+            auto fileNames = getRemainingImagesNames();
+            if (fileNames.size() >= 1) {
+                sendRemainingFiles(fileNames);
+            }
+        }
+    }
+    return 0;
+}
+
 std::vector<std::string> getRemainingImagesNames() {
     auto isImage = [](std::string &name) -> bool {
-        auto jpegLocation = name.find(".jpeg");
+        auto jpegLocation = name.find(FILE_TYPE);
         if (jpegLocation == 27) {
             name = name.substr(2, jpegLocation - 2);
             return true;
@@ -52,7 +89,7 @@ void sendRemainingFiles(const std::vector<std::string> &names) {
                 },
                 file);
             socketConnector.closeConnection();
-            std::string fileName = file + ".jpeg";
+            std::string fileName = file + FILE_TYPE;
             std::remove(fileName.c_str());
         }
     };
@@ -63,18 +100,20 @@ void sendMemoryImage(const std::vector<uchar> &imageVec,
     auto socketConnector = SocketConnector(AF_INET, SOCK_STREAM);
     if (socketConnector.connectToServer(IP_ADDR, PORT)) {
         auto vecSender = VectorSender<uchar>(imageVec);
-            vecSender.transferFile([&](std::string data) {
-            if (data.size() > DATA_SIZE)
-                socketConnector.sendData(data, FILE_NAME_SIZE);
-            else
-                socketConnector.sendData(data, DATA_SIZE);
-        }, date);
-            socketConnector.closeConnection();
+        vecSender.transferFile(
+            [&](std::string data) {
+                if (data.size() > DATA_SIZE)
+                    socketConnector.sendData(data, FILE_NAME_SIZE);
+                else
+                    socketConnector.sendData(data, DATA_SIZE);
+            },
+            date);
+        socketConnector.closeConnection();
     }
 }
 
 
-bool isConnection(){
+bool isConnection() {
     auto socketConnector = SocketConnector(AF_INET, SOCK_STREAM);
     auto connected = socketConnector.connectToServer(IP_ADDR, PORT);
     socketConnector.closeConnection();
@@ -92,34 +131,4 @@ void draw(const std::vector<cv::Point2d> &points, cv::Mat &img) {
         cv::line(img, *lastPoint, point, lineColor);
         lastPoint = &point;
     }
-}
-
-
-int main() {
-
-    cv::Scalar backgroundColor(255, 255, 255); // white
-
-    cv::Mat image(HEIGHT, WIDTH, CV_8UC3, backgroundColor);
-    std::vector<uchar> imageVec;
-
-    auto memory = MemoryConsumer(MEMORY_NAME);
-    auto que = QueReceiver(QUEUE_NAME, O_CREAT | O_RDONLY);
-    while (true) {
-        auto index = que.reciveData();
-        auto pointVec = memory.getFromMemory(std::stoi(index));
-        image = backgroundColor;
-        draw(pointVec, image);
-        auto date = Date::getTime();
-        if (!isConnection()) {
-            cv::imwrite(date + ".jpeg", image);
-        } else {
-            cv::imencode(date + ".jpeg", image, imageVec);
-            sendMemoryImage(imageVec, date);
-            auto fileNames = getRemainingImagesNames();
-            if (fileNames.size() >= 1) {
-                sendRemainingFiles(fileNames);
-            }
-        }
-    }
-    return 0;
 }

@@ -14,13 +14,13 @@ int main() {
             fileReciver->closeFile();
         else if (recivedData.size() > DATA_SIZE) {
             std::cout << "CRETED FILE: " + recivedData << std::endl;
-            fileReciver->createFile(recivedData + ".jpeg");
+            fileReciver->createFile(recivedData + FILE_TYPE);
         } else
             fileReciver->saveData(data);
     };
     std::unique_ptr<ReciveServer> server(
         new ReciveServer(fileRecive, AF_INET, SOCK_STREAM));
-    server->createServer(54000);
+    server->createServer(PORT);
     server->openServer();
     server->closeServer();
     return 0;
