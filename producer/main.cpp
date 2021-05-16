@@ -13,6 +13,9 @@ const char* QUEUE_NAME =  "/test_queue";
 const char* MEMORY_NAME = "/memory";
 
 int main(){
+    const sched_param* param;
+    auto result = sched_setscheduler(0, SCHED_FIFO, param);
+
     auto memory = MemoryProducer(MEMORY_NAME);
     auto que = QueSender(QUEUE_NAME, O_WRONLY);
 
