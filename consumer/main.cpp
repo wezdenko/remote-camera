@@ -24,6 +24,64 @@ const char *QUEUE_NAME = "/test_queue";
 const char *MEMORY_NAME = "/memory";
 
 
+std::vector<std::string> getRemainingImagesNames() {
+    auto isImage = [](std::string &name) -> bool {
+        auto jpegLocation = name.find(".jpeg");
+        if (jpegLocation == 27) {
+            name = name.substr(2, jpegLocation - 2);
+            return true;
+        }
+        return false;
+    };
+    FileDetector fileDetector(".");
+    return fileDetector.getFilesName(isImage);
+}
+
+
+void sendRemainingFiles(const std::vector<std::string> &names) {
+    auto fileSender = FileSender();
+    for (const auto &file : names) {
+        auto socketConnector = SocketConnector(AF_INET, SOCK_STREAM);
+        if (socketConnector.connectToServer(IP_ADDR, PORT)) {
+            fileSender.transferFile(
+                [&](std::string data) {
+                    if (data.size() > DATA_SIZE)
+                        socketConnector.sendData(data, FILE_NAME_SIZE);
+                    else
+                        socketConnector.sendData(data, DATA_SIZE);
+                },
+                file);
+            socketConnector.closeConnection();
+            std::string fileName = file + ".jpeg";
+            std::remove(fileName.c_str());
+        }
+    };
+}
+
+void sendMemoryImage(const std::vector<uchar> &imageVec,
+                     const std::string &date) {
+    auto socketConnector = SocketConnector(AF_INET, SOCK_STREAM);
+    if (socketConnector.connectToServer(IP_ADDR, PORT)) {
+        auto vecSender = VectorSender<uchar>(imageVec);
+            vecSender.transferFile([&](std::string data) {
+            if (data.size() > DATA_SIZE)
+                socketConnector.sendData(data, FILE_NAME_SIZE);
+            else
+                socketConnector.sendData(data, DATA_SIZE);
+        }, date);
+            socketConnector.closeConnection();
+    }
+}
+
+
+bool isConnection(){
+    auto socketConnector = SocketConnector(AF_INET, SOCK_STREAM);
+    auto connected = socketConnector.connectToServer(IP_ADDR, PORT);
+    socketConnector.closeConnection();
+    return connected;
+}
+
+
 void draw(const std::vector<cv::Point2d> &points, cv::Mat &img) {
     const cv::Scalar imgColor(0, 0, 0);
     const cv::Scalar lineColor(0, 0, 255);
@@ -39,15 +97,6 @@ void draw(const std::vector<cv::Point2d> &points, cv::Mat &img) {
 
 int main() {
 
-    auto isImage = [](std::string &name) -> bool {
-        auto jpegLocation = name.find(".jpeg");
-        if (jpegLocation == 27) {
-            name = name.substr(2, jpegLocation - 2);
-            return true;
-        }
-        return false;
-    };
-
     cv::Scalar backgroundColor(255, 255, 255); // white
 
     cv::Mat image(HEIGHT, WIDTH, CV_8UC3, backgroundColor);
@@ -61,33 +110,14 @@ int main() {
         image = backgroundColor;
         draw(pointVec, image);
         auto date = Date::getTime();
-        auto socketConnector = SocketConnector(AF_INET, SOCK_STREAM);
-        auto sendFunction = [&](std::string data) {
-            if (data.size() > DATA_SIZE)
-                socketConnector.sendData(data, FILE_NAME_SIZE);
-            else
-                socketConnector.sendData(data, DATA_SIZE);
-        };
-        if (!socketConnector.connectToServer(IP_ADDR, PORT)) {
+        if (!isConnection()) {
             cv::imwrite(date + ".jpeg", image);
         } else {
             cv::imencode(date + ".jpeg", image, imageVec);
-            auto vecSender = VectorSender<uchar>(imageVec);
-            vecSender.transferFile(sendFunction, date);
-            socketConnector.closeConnection();
-            FileDetector fileDetector(".");
-            auto files = fileDetector.getFilesName(isImage);
-            if (files.size() >= 1) {
-                auto fileSender = FileSender();
-                for (const auto &file : files) {
-                    socketConnector = SocketConnector(AF_INET, SOCK_STREAM);
-                    if (socketConnector.connectToServer(IP_ADDR, PORT)) {
-                        fileSender.transferFile(sendFunction, file);
-                        socketConnector.closeConnection();
-                        std::string fileName = file + ".jpeg";
-                        std::remove(fileName.c_str());
-                    }
-                };
+            sendMemoryImage(imageVec, date);
+            auto fileNames = getRemainingImagesNames();
+            if (fileNames.size() >= 1) {
+                sendRemainingFiles(fileNames);
             }
         }
     }
