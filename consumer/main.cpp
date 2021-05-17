@@ -27,7 +27,7 @@ const char *MEMORY_NAME = "/memory";
 std::vector<std::string> getRemainingImagesNames();
 void sendRemainingFiles(const std::vector<std::string> &names);
 void sendMemoryImage(const std::vector<uchar> &imageVec,
-                     const std::string &date);
+                     const std::string &date, SocketConnector& socketConnector);
 bool isConnection();
 void draw(const std::vector<cv::Point2d> &points, cv::Mat &img);
 
@@ -47,15 +47,14 @@ int main() {
         image = backgroundColor;
         draw(pointVec, image);
         auto date = Date::getTime();
-        if (!isConnection()) {
+        auto socketConnector = SocketConnector(AF_INET, SOCK_STREAM);
+        if (!socketConnector.connectToServer(IP_ADDR, PORT)) {
             cv::imwrite(date + FILE_TYPE, image);
         } else {
             cv::imencode(date + FILE_TYPE, image, imageVec);
-            sendMemoryImage(imageVec, date);
-            auto fileNames = getRemainingImagesNames();
-            if (fileNames.size() >= 1) {
-                sendRemainingFiles(fileNames);
-            }
+            sendMemoryImage(imageVec, date, socketConnector);
+            socketConnector.closeConnection();
+            sendRemainingFiles(getRemainingImagesNames());
         }
     }
     return 0;
@@ -96,9 +95,7 @@ void sendRemainingFiles(const std::vector<std::string> &names) {
 }
 
 void sendMemoryImage(const std::vector<uchar> &imageVec,
-                     const std::string &date) {
-    auto socketConnector = SocketConnector(AF_INET, SOCK_STREAM);
-    if (socketConnector.connectToServer(IP_ADDR, PORT)) {
+                     const std::string &date, SocketConnector& socketConnector) {
         auto vecSender = VectorSender<uchar>(imageVec);
         vecSender.transferFile(
             [&](std::string data) {
@@ -108,18 +105,7 @@ void sendMemoryImage(const std::vector<uchar> &imageVec,
                     socketConnector.sendData(data, DATA_SIZE);
             },
             date);
-        socketConnector.closeConnection();
-    }
 }
-
-
-bool isConnection() {
-    auto socketConnector = SocketConnector(AF_INET, SOCK_STREAM);
-    auto connected = socketConnector.connectToServer(IP_ADDR, PORT);
-    socketConnector.closeConnection();
-    return connected;
-}
-
 
 void draw(const std::vector<cv::Point2d> &points, cv::Mat &img) {
     const cv::Scalar imgColor(0, 0, 0);
