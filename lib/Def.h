@@ -1,9 +1,10 @@
 // globals for object detection
-#define FPS 15
+#define FPS 10
 #define NUM_OF_EDGES 10
 #define THRESHOLD 230
 #define MAX_ERROR 0.1
 #define DELAY 3 * FPS
+#define FREQUENCY 100000000
 
 // globals for image
 #define WIDTH 640
