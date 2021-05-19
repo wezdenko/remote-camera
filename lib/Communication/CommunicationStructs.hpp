@@ -16,13 +16,24 @@ class MoveBuffer{
         };
         inline void transferToBuffer(const std::vector<Point>& points){
             for(int i=0; i<LIST_SIZE; i++){
-                if(points[i].x > 0.05)
-                    buf[i] = Point(points[i]);
-                else
-                    buf[i] = Point(-1.0, -1.0);
+                buf[i] = Point(-1.0, -1.0);
             }
-        }
-        Point buf[250];
+            for(int i=0; i<points.size(); i++){
+                buf[i] = points[i];
+            }
+        };
+        inline std::vector<Point> transferBufferToVector(){
+            std::vector<Point> points;
+            Point point;
+            for(int i=0; i<LIST_SIZE; i++){
+                point = buf[i];
+                if(point.x != -1.0)
+                points.push_back(Point(point));
+            }
+            return points;
+        };
+    private:
+        Point buf[LIST_SIZE];
 };
 
 struct Shmbuf {
