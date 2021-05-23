@@ -56,6 +56,7 @@ int main() {
         auto socketConnector = SocketConnector(AF_INET, SOCK_STREAM);
         if (!socketConnector.connectToServer(IP_ADDR, PORT)) {
             cv::imwrite(date + FILE_TYPE, image);
+            socketConnector.closeConnection();
         } else {
             cv::imencode(date + FILE_TYPE, image, imageVec);
             sendMemoryImage(imageVec, date, socketConnector);
@@ -93,10 +94,10 @@ void sendRemainingFiles(const std::vector<std::string> &names) {
                         socketConnector.sendData(data, DATA_SIZE);
                 },
                 file);
-            socketConnector.closeConnection();
             std::string fileName = file + FILE_TYPE;
             std::remove(fileName.c_str());
         }
+        socketConnector.closeConnection();
     };
 }
 
