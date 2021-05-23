@@ -9,8 +9,8 @@ then
     mkdir $FOLDER
 fi
 
-ConsumerApp="build/consumer/ConsumerApp"
-PruducerApp="build/producer/ProducerApp"
+ConsumerApp="build/pathCreator/pathCreator"
+PruducerApp="build/movementDetector/movementDetector"
 ServerApp="build/server/ServerApp"
 
 if [[ -f $ConsumerApp && -f $PruducerApp && -f $ServerApp ]]
@@ -28,5 +28,5 @@ fi
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
 x-terminal-emulator -e "${SCRIPT_DIR}/${FOLDER}/ServerApp" ServerApp &
-x-terminal-emulator -e "${SCRIPT_DIR}/${FOLDER}/ConsumerApp" ConsumerApp &
-x-terminal-emulator -e "${SCRIPT_DIR}/${FOLDER}/ProducerApp" ProducerApp &
+x-terminal-emulator -e "${SCRIPT_DIR}/${FOLDER}/pathCreator" ConsumerApp &
+x-terminal-emulator -e "${SCRIPT_DIR}/${FOLDER}/movementDetector" ProducerApp &
