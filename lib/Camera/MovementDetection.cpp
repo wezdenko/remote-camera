@@ -16,7 +16,7 @@ void MovementDetection::detectMovement(const cv::Point2d &currentPosition) {
     movementEnded = false;
 
     // if last position was observed
-    if (this->lastPosition != cv::Point2d(-1, -1)) {
+    if (currentPosition != cv::Point2d(-1, -1)) {
         this->determineMovement(currentPosition);
     }
     // if no last position and state is moving
