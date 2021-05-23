@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 2.8)
+set(CMAKE_TOOLCHAIN_FILE /home/swo/Desktop/BR_Internet_Radio/QemuVirt64/buildroot-2020.02/output/host/share/buildroot/toolchainfile.cmake)
 project(SKPS_Project)
 find_package(OpenCV REQUIRED)
 

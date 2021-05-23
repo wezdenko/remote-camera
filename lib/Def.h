@@ -16,5 +16,5 @@
 
 // globals for data transmision
 #define FILE_NAME_SIZE 35
-#define DATA_SIZE 3
+#define DATA_SIZE 4
 #define FILE_TYPE ".jpeg"
