@@ -1,14 +1,3 @@
-#include "Communication/CommunicationStructs.hpp"
-#include "Communication/Memory/MemoryConsumer.hpp"
-#include "Communication/Queue/QueReceiver.hpp"
-#include "Def.h"
-#include "FileLib/Date.hpp"
-#include "FileLib/FileDetector.hpp"
-#include "FileLib/FileSender.hpp"
-#include "FileLib/VectorSender.hpp"
-#include "Socket/SocketConnector.hpp"
-#include "opencv2/imgcodecs.hpp"
-#include "opencv2/imgproc.hpp"
 #include <arpa/inet.h>
 #include <iostream>
 #include <memory>
@@ -18,10 +7,19 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <vector>
+#include "Def.h"
+#include "Communication/CommunicationStructs.hpp"
+#include "Communication/Memory/MemoryConsumer.hpp"
+#include "Communication/Queue/QueReceiver.hpp"
+#include "FileLib/Date.hpp"
+#include "FileLib/FileDetector.hpp"
+#include "FileLib/FileSender.hpp"
+#include "FileLib/VectorSender.hpp"
+#include "Socket/SocketConnector.hpp"
+#include "opencv2/imgcodecs.hpp"
+#include "opencv2/imgproc.hpp"
 
 
-const char *QUEUE_NAME = "/test_queue";
-const char *MEMORY_NAME = "/memory";
 
 
 std::vector<std::string> getRemainingImagesNames();
@@ -34,10 +32,18 @@ void draw(const std::vector<cv::Point2d> &points, cv::Mat &img);
 
 int main() {
 
+    std::cout<< "!!!!!!!!!!!!!!!!!!!!!!!!!"<<std::endl;
+    std::cout<< "!!!!Path Creator INIT!!!!"<<std::endl;
+    std::cout<< "!!!!!!!!!!!!!!!!!!!!!!!!!"<<std::endl;
+
     cv::Scalar backgroundColor(255, 255, 255); // white
 
     cv::Mat image(HEIGHT, WIDTH, CV_8UC3, backgroundColor);
     std::vector<uchar> imageVec;
+
+
+    const char *QUEUE_NAME = "/test_queue";
+    const char *MEMORY_NAME = "/memory";
 
     auto memory = MemoryConsumer(MEMORY_NAME);
     auto que = QueReceiver(QUEUE_NAME, O_CREAT | O_RDONLY);

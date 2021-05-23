@@ -1,5 +1,4 @@
 #include "MemoryAllocator.hpp"
-#include <iostream>
 
 MemoryAllocator::MemoryAllocator(std::string mName): memoryName(mName){
     sharedMemmory = shm_open(memoryName.c_str(), O_CREAT|O_RDWR, S_IRUSR | S_IWUSR);

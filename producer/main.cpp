@@ -8,16 +8,12 @@
 #include <sched.h>
 #include <unistd.h>
 #include <algorithm>
+#include <iostream>
 #include "Communication/Memory/MemoryProducer.hpp"
 #include "Communication/Queue/QueSender.hpp"
 #include "Camera/Camera.hpp"
 #include "Def.h"
-#include <iostream>
 
-
-
-const char* QUEUE_NAME =  "/test_queue";
-const char* MEMORY_NAME = "/memory";
 
 void detectMovement(Camera& camera, MemoryProducer& memory, QueSender& que);
 
@@ -25,6 +21,13 @@ void detectMovement(Camera& camera, MemoryProducer& memory, QueSender& que);
 int main(){
     const sched_param* param;
     int result = sched_setscheduler(0, SCHED_FIFO, param);
+
+    const char* QUEUE_NAME =  "/test_queue";
+    const char* MEMORY_NAME = "/memory";
+
+    std::cout<< "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"<<std::endl;
+    std::cout<< "!!!!Movement Detector INIT!!!!"<<std::endl;
+    std::cout<< "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"<<std::endl;
 
     struct itimerspec timerValue;
     timerValue.it_value.tv_sec = 0;

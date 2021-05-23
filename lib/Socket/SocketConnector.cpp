@@ -1,4 +1,3 @@
-#include <iostream>
 #include <sys/types.h>
 #include <unistd.h>
 #include <sys/socket.h>
@@ -15,7 +14,6 @@ SocketConnector::SocketConnector(int IP_TYPE, int STREAM_TYPE)
     this->sock = socket(ipType, streamType, 0);
     if(this->sock == -1){
         this->errorOccured = true;
-        std::cerr<<"Cannot create Socket!";
     };
 
 };
