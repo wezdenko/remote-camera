@@ -3,8 +3,10 @@
 #define NUM_OF_EDGES 10
 #define THRESHOLD 230
 #define MAX_ERROR 0.1
+
+// dont change these
 #define DELAY 3 * FPS
-#define FREQUENCY 100000000
+#define FREQUENCY 1000000000 * (1 / (double)FPS)
 
 // globals for image
 #define WIDTH 640
