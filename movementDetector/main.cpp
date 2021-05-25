@@ -3,6 +3,7 @@
 #include "Communication/Queue/QueSender.hpp"
 #include "Def.h"
 #include <algorithm>
+#include <chrono>
 #include <iostream>
 #include <mqueue.h>
 #include <sched.h>
@@ -50,8 +51,21 @@ int main() {
 
     int timersElapsed = 0;
     while (true) {
+        auto start = std::chrono::high_resolution_clock::now();
+
         auto info = read(epollEvent.data.fd, &timersElapsed, 64);
         detectMovement(camera, memory, que);
+
+        auto finish = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double> elapsed = finish - start;
+        double measuredFPS = 1 / elapsed.count();
+        double mse = pow(measuredFPS - FPS, 2);
+        int maxFpsError = 1;
+
+        if (mse > maxFpsError) {
+            std::cout << "Elapsed time: " << elapsed.count() << std::endl;
+            std::cout << "FPS: " << measuredFPS << std::endl;
+        }
     }
     return 0;
 }
