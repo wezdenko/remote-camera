@@ -1,41 +1,35 @@
-#include <sys/types.h>
-#include <unistd.h>
-#include <sys/socket.h>
-#include <netdb.h>
+#include "SocketConnector.hpp"
 #include <arpa/inet.h>
+#include <netdb.h>
 #include <string.h>
 #include <string>
-#include "SocketConnector.hpp"
+#include <sys/socket.h>
+#include <sys/types.h>
+#include <unistd.h>
 
-SocketConnector::SocketConnector(int IP_TYPE, int STREAM_TYPE)
-{
+SocketConnector::SocketConnector(int IP_TYPE, int STREAM_TYPE) {
     this->ipType = IP_TYPE;
     this->streamType = STREAM_TYPE;
     this->sock = socket(ipType, streamType, 0);
-    if(this->sock == -1){
+    if (this->sock == -1) {
         this->errorOccured = true;
     };
-
 };
-bool SocketConnector::connectToServer(std::string ipAddress, int portNumber)
-{
+bool SocketConnector::connectToServer(std::string ipAddress, int portNumber) {
 
     sockaddr_in hint;
     hint.sin_family = this->ipType;
     hint.sin_port = htons(portNumber);
     inet_pton(this->ipType, ipAddress.c_str(), &hint.sin_addr);
 
-    int connection = connect(sock, (const sockaddr*)&hint, sizeof(hint));
+    int connection = connect(sock, (const sockaddr *)&hint, sizeof(hint));
 
-    return connection == -1? false : true;
+    return connection == -1 ? false : true;
 }
 
-void SocketConnector::closeConnection()
-{
-    close(this->sock);
-}
+void SocketConnector::closeConnection() { close(this->sock); }
 
-bool SocketConnector::sendData(std::string data, int size){
+bool SocketConnector::sendData(std::string data, int size) {
     int sendRes = send(sock, data.c_str(), size, 0);
     return sendRes == -1 ? false : true;
 }

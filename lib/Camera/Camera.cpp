@@ -38,6 +38,4 @@ const std::vector<cv::Point2d> &Camera::getPoints() const {
     return this->movDetection.getPoints();
 }
 
-void Camera::clearPoints() {
-    this->movDetection.clearPoints();
-}
+void Camera::clearPoints() { this->movDetection.clearPoints(); }

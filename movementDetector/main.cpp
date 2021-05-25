@@ -1,33 +1,33 @@
-#include <string>
-#include <vector>
-#include <mqueue.h>
-#include <stdio.h>
-#include <sys/timerfd.h>
-#include <sys/poll.h>
-#include <sys/epoll.h>
-#include <sched.h>
-#include <unistd.h>
-#include <algorithm>
-#include <iostream>
+#include "Camera/Camera.hpp"
 #include "Communication/Memory/MemoryProducer.hpp"
 #include "Communication/Queue/QueSender.hpp"
-#include "Camera/Camera.hpp"
 #include "Def.h"
+#include <algorithm>
+#include <iostream>
+#include <mqueue.h>
+#include <sched.h>
+#include <stdio.h>
+#include <string>
+#include <sys/epoll.h>
+#include <sys/poll.h>
+#include <sys/timerfd.h>
+#include <unistd.h>
+#include <vector>
 
 
-void detectMovement(Camera& camera, MemoryProducer& memory, QueSender& que);
+void detectMovement(Camera &camera, MemoryProducer &memory, QueSender &que);
 
 
-int main(){
-    const sched_param* param;
+int main() {
+    const sched_param *param;
     int result = sched_setscheduler(0, SCHED_FIFO, param);
 
-    const char* QUEUE_NAME =  "/test_queue";
-    const char* MEMORY_NAME = "/memory";
+    const char *QUEUE_NAME = "/test_queue";
+    const char *MEMORY_NAME = "/memory";
 
-    std::cout<< "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"<<std::endl;
-    std::cout<< "!!!!Movement Detector INIT!!!!"<<std::endl;
-    std::cout<< "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"<<std::endl;
+    std::cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << std::endl;
+    std::cout << "!!!!Movement Detector INIT!!!!" << std::endl;
+    std::cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << std::endl;
 
     struct itimerspec timerValue;
     timerValue.it_value.tv_sec = 0;
@@ -56,9 +56,9 @@ int main(){
     return 0;
 }
 
-void detectMovement(Camera& camera, MemoryProducer& memory, QueSender& que){
+void detectMovement(Camera &camera, MemoryProducer &memory, QueSender &que) {
     camera.processFrame();
-    if(camera.isEndOfMovement()){
+    if (camera.isEndOfMovement()) {
         memory.addToMemory(camera.getPoints());
         que.sendData(std::to_string(memory.getCurrentIndex()));
         camera.clearPoints();

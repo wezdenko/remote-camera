@@ -1,23 +1,23 @@
 #pragma once
-#include <sys/mman.h>
+#include "../CommunicationStructs.hpp"
 #include <fcntl.h>
+#include <string>
+#include <sys/mman.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include <string>
-#include "../CommunicationStructs.hpp"
 
 
-class MemoryAllocator{
-    public:
-        MemoryAllocator(std::string memoryName);
+class MemoryAllocator {
+  public:
+    MemoryAllocator(std::string memoryName);
 
-        Shmbuf* getBuffer();
+    Shmbuf *getBuffer();
 
-        virtual ~MemoryAllocator();
-    protected:
-        int sharedMemmory;
-        Shmbuf* buffer; 
-        std::string memoryName;
+    virtual ~MemoryAllocator();
 
+  protected:
+    int sharedMemmory;
+    Shmbuf *buffer;
+    std::string memoryName;
 };

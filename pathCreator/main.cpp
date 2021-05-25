@@ -1,3 +1,14 @@
+#include "Communication/CommunicationStructs.hpp"
+#include "Communication/Memory/MemoryConsumer.hpp"
+#include "Communication/Queue/QueReceiver.hpp"
+#include "Def.h"
+#include "FileLib/Date.hpp"
+#include "FileLib/FileDetector.hpp"
+#include "FileLib/FileSender.hpp"
+#include "FileLib/VectorSender.hpp"
+#include "Socket/SocketConnector.hpp"
+#include "opencv2/imgcodecs.hpp"
+#include "opencv2/imgproc.hpp"
 #include <arpa/inet.h>
 #include <iostream>
 #include <memory>
@@ -7,34 +18,21 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <vector>
-#include "Def.h"
-#include "Communication/CommunicationStructs.hpp"
-#include "Communication/Memory/MemoryConsumer.hpp"
-#include "Communication/Queue/QueReceiver.hpp"
-#include "FileLib/Date.hpp"
-#include "FileLib/FileDetector.hpp"
-#include "FileLib/FileSender.hpp"
-#include "FileLib/VectorSender.hpp"
-#include "Socket/SocketConnector.hpp"
-#include "opencv2/imgcodecs.hpp"
-#include "opencv2/imgproc.hpp"
-
-
 
 
 std::vector<std::string> getRemainingImagesNames();
 void sendRemainingFiles(const std::vector<std::string> &names);
 void sendMemoryImage(const std::vector<uchar> &imageVec,
-                     const std::string &date, SocketConnector& socketConnector);
+                     const std::string &date, SocketConnector &socketConnector);
 bool isConnection();
 void draw(const std::vector<cv::Point2d> &points, cv::Mat &img);
 
 
 int main() {
 
-    std::cout<< "!!!!!!!!!!!!!!!!!!!!!!!!!"<<std::endl;
-    std::cout<< "!!!!Path Creator INIT!!!!"<<std::endl;
-    std::cout<< "!!!!!!!!!!!!!!!!!!!!!!!!!"<<std::endl;
+    std::cout << "!!!!!!!!!!!!!!!!!!!!!!!!!" << std::endl;
+    std::cout << "!!!!Path Creator INIT!!!!" << std::endl;
+    std::cout << "!!!!!!!!!!!!!!!!!!!!!!!!!" << std::endl;
 
     cv::Scalar backgroundColor(255, 255, 255); // white
 
@@ -102,16 +100,17 @@ void sendRemainingFiles(const std::vector<std::string> &names) {
 }
 
 void sendMemoryImage(const std::vector<uchar> &imageVec,
-                     const std::string &date, SocketConnector& socketConnector) {
-        auto vecSender = VectorSender<uchar>(imageVec);
-        vecSender.transferFile(
-            [&](std::string data) {
-                if (data.size() > DATA_SIZE)
-                    socketConnector.sendData(data, FILE_NAME_SIZE);
-                else
-                    socketConnector.sendData(data, DATA_SIZE);
-            },
-            date);
+                     const std::string &date,
+                     SocketConnector &socketConnector) {
+    auto vecSender = VectorSender<uchar>(imageVec);
+    vecSender.transferFile(
+        [&](std::string data) {
+            if (data.size() > DATA_SIZE)
+                socketConnector.sendData(data, FILE_NAME_SIZE);
+            else
+                socketConnector.sendData(data, DATA_SIZE);
+        },
+        date);
 }
 
 void draw(const std::vector<cv::Point2d> &points, cv::Mat &img) {

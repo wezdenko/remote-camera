@@ -1,15 +1,16 @@
 #pragma once
-#include <string>
+#include "FileTransferer.hpp"
 #include <fstream>
-#include  "FileTransferer.hpp"
+#include <string>
 
 
-class FileSender : public FileTransferer{
-    public:
+class FileSender : public FileTransferer {
+  public:
     FileSender();
-    virtual void transferFile(std::function<void(std::string)> transfer, std::string fileName);
+    virtual void transferFile(std::function<void(std::string)> transfer,
+                              std::string fileName);
 
-    private:
+  private:
     void openFile(std::string fileName);
     std::ifstream file;
 };

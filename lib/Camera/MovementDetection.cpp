@@ -31,9 +31,7 @@ void MovementDetection::detectMovement(const cv::Point2d &currentPosition) {
     this->lastPosition = currentPosition;
 }
 
-bool MovementDetection::isEndOfMovement() const {
-    return this->movementEnded;
-}
+bool MovementDetection::isEndOfMovement() const { return this->movementEnded; }
 
 void MovementDetection::setFunction(
     void (*func)(const std::vector<cv::Point2d> &)) {
@@ -45,9 +43,7 @@ const std::vector<cv::Point2d> &MovementDetection::getPoints() const {
     return this->points;
 }
 
-void MovementDetection::clearPoints() {
-    this->points.clear();
-}
+void MovementDetection::clearPoints() { this->points.clear(); }
 
 void MovementDetection::determineMovement(const cv::Point2d &currentPosition) {
     cv::Point2d delta = this->lastPosition - currentPosition;

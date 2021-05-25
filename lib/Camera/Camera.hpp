@@ -1,9 +1,8 @@
-#include "ObjectDetection.hpp"
 #include "MovementDetection.hpp"
+#include "ObjectDetection.hpp"
 
-class Camera
-{
-private:
+class Camera {
+  private:
     cv::Mat frame;
     cv::VideoCapture vid;
 
@@ -15,7 +14,7 @@ private:
 
     cv::Point2d position;
 
-public:
+  public:
     Camera(int numOfEdges, int threshold, int delay, double maxError);
     ~Camera();
 
@@ -25,4 +24,3 @@ public:
     const std::vector<cv::Point2d> &getPoints() const;
     void clearPoints();
 };
-

@@ -1,8 +1,8 @@
 #include "Connector.hpp"
 
 
-class SocketConnector : public Connector{
-    public:
+class SocketConnector : public Connector {
+  public:
     SocketConnector(int IP_TYPE, int STREAM_TYPE);
 
     virtual bool connectToServer(std::string ipAddres, int portNumber);
@@ -10,8 +10,7 @@ class SocketConnector : public Connector{
     virtual void closeConnection();
 
 
-
-    private:
+  private:
     int sock, portNumber, ipType, streamType;
     bool errorOccured;
 };

@@ -1,19 +1,19 @@
 #pragma once
 #define MAX_SIZE 1024
-#include <string>
-#include <fcntl.h>
-#include <sys/types.h>
-#include <mqueue.h>
-#include <unistd.h>
 #include "../CommunicationStructs.hpp"
+#include <fcntl.h>
+#include <mqueue.h>
+#include <string>
+#include <sys/types.h>
+#include <unistd.h>
 
 
+class QueConnector {
+  public:
+    QueConnector(int flags, std::string queName);
+    virtual ~QueConnector();
 
-class QueConnector{
-    public:
-        QueConnector(int flags, std::string queName);
-        virtual ~QueConnector();
-    protected:
-        mqd_t que;
-        std::string queName;
+  protected:
+    mqd_t que;
+    std::string queName;
 };

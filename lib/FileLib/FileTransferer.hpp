@@ -1,8 +1,9 @@
 #pragma once
-#include <string>
 #include <functional>
+#include <string>
 
-class FileTransferer{
-    public:
-    virtual void transferFile(std::function<void(std::string)> transfer, std::string fileName) = 0;
+class FileTransferer {
+  public:
+    virtual void transferFile(std::function<void(std::string)> transfer,
+                              std::string fileName) = 0;
 };

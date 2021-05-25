@@ -1,10 +1,9 @@
 #include <string>
 
-class Date
-{
-public:
+class Date {
+  public:
     static std::string getTime();
 
-private:
+  private:
     Date();
 };
