@@ -53,15 +53,18 @@ int main() {
     while (true) {
         auto start = std::chrono::high_resolution_clock::now();
 
+        // Our Program
         auto info = read(epollEvent.data.fd, &timersElapsed, 64);
         detectMovement(camera, memory, que);
 
+        // Measuring time
         auto finish = std::chrono::high_resolution_clock::now();
         std::chrono::duration<double> elapsed = finish - start;
         double measuredFPS = 1 / elapsed.count();
         double mse = pow(measuredFPS - FPS, 2);
         int maxFpsError = 1;
 
+        // Printing time if error is too high
         if (mse > maxFpsError) {
             std::cout << "Elapsed time: " << elapsed.count() << std::endl;
             std::cout << "FPS: " << measuredFPS << std::endl;
